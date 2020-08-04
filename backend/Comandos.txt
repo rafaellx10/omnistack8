@@ -1,0 +1,8 @@
+mkdir backend
+
+npm init -y
+yarn init -y
+
+npm i express
+yarn add express
+
