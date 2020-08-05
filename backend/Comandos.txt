@@ -6,3 +6,8 @@ yarn init -y
 npm i express
 yarn add express
 
+npm i nodemon -D
+yarn add nodemon -D
+
+npm run dev
+yarn dev
