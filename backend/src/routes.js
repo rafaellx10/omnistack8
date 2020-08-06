@@ -7,4 +7,14 @@ routes.get('/', (request, response) => {
   //URL: http://localhost:3333/?name=Rafael
 });
 
+routes.post('/devs', (request, response) => {
+  console.log(request.body);
+  return response.json({ ok: true });
+  //URL(post): http://localhost:3333/devs
+  // {
+  //   "nome": "rafael",
+  //   "email": "rafaellx10@gmai.com"
+  // }
+});
+
 module.exports = routes;
