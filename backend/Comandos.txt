@@ -11,3 +11,6 @@ yarn add nodemon -D
 
 npm run dev
 yarn dev
+
+npm i mongoose
+yarn add mongoose
