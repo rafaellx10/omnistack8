@@ -1,4 +1,5 @@
 const express = require('express');
+const DevController = require('./controllers/DevController');
 
 const routes = express.Router();
 
@@ -7,14 +8,6 @@ routes.get('/', (request, response) => {
   //URL: http://localhost:3333/?name=Rafael
 });
 
-routes.post('/devs', (request, response) => {
-  console.log(request.body);
-  return response.json({ ok: true });
-  //URL(post): http://localhost:3333/devs
-  // {
-  //   "nome": "rafael",
-  //   "email": "rafaellx10@gmai.com"
-  // }
-});
+routes.post('/devs', DevController.store);
 
 module.exports = routes;
