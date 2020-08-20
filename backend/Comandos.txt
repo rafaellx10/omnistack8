@@ -14,3 +14,6 @@ yarn dev
 
 npm i mongoose
 yarn add mongoose
+
+npm i axios
+yarn add axios
