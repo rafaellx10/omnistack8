@@ -10,6 +10,7 @@ routes.get('/', (request, response) => {
   //URL: http://localhost:3333/?name=Rafael
 });
 
+routes.get('/devs', DevController.index);
 routes.post('/devs', DevController.store);
 routes.post('/devs/:devId/likes', LikeController.store);
 routes.post('/devs/:devId/dislikes', DislikeController.store);
