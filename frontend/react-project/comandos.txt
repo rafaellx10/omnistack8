@@ -1,0 +1,2 @@
+npx create-react-app react-name
+yarn create react-app react-name
