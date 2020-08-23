@@ -17,3 +17,6 @@ yarn add mongoose
 
 npm i axios
 yarn add axios
+
+npm i cors
+yarn add cors
