@@ -65,3 +65,10 @@
   transform: translateY(-4px);
   transition: all 0.5s;
 }
+
+.main-container .empty {
+  font-size: 32px;
+  color: #999;
+  font-weight: bolder;
+  margin-top: 300px;
+}
