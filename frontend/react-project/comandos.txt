@@ -3,3 +3,6 @@ yarn create react-app react-name
 
 npm install react-router-dom
 yarn add react-router-dom
+
+npm install axios
+yarn add axios
