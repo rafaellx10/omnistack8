@@ -45,7 +45,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Login() {
+export default function Login({navigation}) {
+  function handleLogin() {
+    navigation.navigate('Main');
+  }
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -59,7 +62,7 @@ export default function Login() {
         placeholderTextColor="#999"
         style={styles.input}
       />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Enviar</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
