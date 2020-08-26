@@ -1,0 +1,19 @@
+npx react-native init tindev
+// ou
+yarn global add react-native-cli
+react-native init tindev
+
+npm react-native run-android
+npm react-native run-ios
+// ou
+yarn react-native run-android
+yarn react-native run-ios
+
+// find erro on log
+npm run android --stacktrace --verbose
+npm run android --info
+npm run android --debug
+npm run android --scan
+
+// after npm run android
+npm start
