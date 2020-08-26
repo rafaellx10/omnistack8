@@ -17,3 +17,35 @@ npm run android --scan
 
 // after npm run android
 npm start
+
+// dependencies to handler navigation on react-native
+npm install react-navigation react-native-gesture-handler react-native-reanimated
+yarn add react-navigation react-native-gesture-handler react-native-reanimated
+
+// react-native-gesture-handler require to add dependencies and code to /android code base... 
+// in /android/app/src/main/java/com/tindev/MainActivity.java
+// and add ...
+
+import com.facebook.react.ReactActivityDelegate;
+import com.facebook.react.ReactRootView;
+import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+
+// and add this code
+@Override
+protected ReactActivityDelegate createReactActivityDelegate() {
+  return new ReactActivityDelegate(this, getMainComponentName()) {
+    @Override
+    protected ReactRootView createRootView() {
+      return new RNGestureHandlerEnabledRootView(MainActivity.this);
+   }
+ };
+}
+
+npm run android
+
+// for ios (only on MAC's)
+// install cocoapods
+sudo gem install cocoapods
+cd /ios
+pod install
+npm run ios
