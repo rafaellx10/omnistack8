@@ -52,3 +52,17 @@ npm run ios
 
 npm install axios
 yarn add axios
+
+adb reverse tcp:3333 tcp:3333
+
+npm install @react-native-community/async-storage
+yarn add @react-native-community/async-storage
+
+// in ios
+cd ios
+pod install
+
+npm run android
+//react-native run-android
+run run ios
+//react-native run-ios

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Text,
   Platform,
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import api from '../services/api';
 import logo from '../assets/logo.png';
 
 const styles = StyleSheet.create({
@@ -46,8 +48,23 @@ const styles = StyleSheet.create({
 });
 
 export default function Login({navigation}) {
-  function handleLogin() {
-    navigation.navigate('Main');
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    AsyncStorage.getItem('user').then((user) => {
+      if (user) navigation.navigate('Main');
+    });
+  }, []);
+
+  async function handleLogin() {
+    // open Debug JS Remorely
+    console.log(user);
+    const response = await api.post('/devs', {username: user});
+
+    const {_id} = response.data;
+    await AsyncStorage.setItem('user', _id);
+    console.log(_id);
+    navigation.navigate('Main', {_id});
   }
   return (
     <KeyboardAvoidingView
@@ -61,6 +78,8 @@ export default function Login({navigation}) {
         placeholder="Digite seu usuário no Github"
         placeholderTextColor="#999"
         style={styles.input}
+        value={user}
+        onChangeText={setUser}
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Enviar</Text>
