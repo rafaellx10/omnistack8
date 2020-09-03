@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -13,75 +13,95 @@ import logo from '../assets/logo.png';
 import like from '../assets/like.png';
 import dislike from '../assets/dislike.png';
 
+import api from '../services/api';
+
 export default function Main({navigation}) {
-  async function handleLogOff() {
+  const id = navigation.getParam('user');
+  const [users, setUsers] = useState([]);
+
+  // console.log(id);
+
+  useEffect(() => {
+    // outra maneira de fazer uma async function
+    // (async function loadUsers() {
+    // })();
+    async function loadUsers() {
+      const response = await api.get('/devs', {
+        headers: {
+          user: id,
+        },
+      });
+      setUsers(response.data);
+    }
+
+    loadUsers();
+  }, [id]);
+
+  async function handleLike() {
+    const [user, ...rest] = users;
+    await api.post(`/devs/${user._id}/likes`, null, {
+      headers: {user: id},
+    });
+
+    setUsers(rest);
+  }
+
+  async function handleDislike() {
+    // const user = users[0];
+    // console.log(user.id)
+    const [user, ...rest] = users;
+    await api.post(`/devs/${user._id}/dislikes`, null, {
+      headers: {user: id},
+    });
+
+    setUsers(rest);
+  }
+  async function handleLogout() {
     await AsyncStorage.removeItem('user');
+    // await AsyncStorage.clear();
     navigation.navigate('Login');
   }
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={handleLogOff}>
+      <TouchableOpacity onPress={handleLogout}>
         <Image source={logo} style={styles.logo} />
       </TouchableOpacity>
 
       <View style={styles.cardContainer}>
-        <View style={[styles.card, {zIndex: 3}]}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://avatars2.githubusercontent.com/u/2254731?v=4',
-            }}
-          />
-          <View style={styles.footer}>
-            <Text style={styles.name}>Diego Fernandes</Text>
-            <Text style={styles.bio} numberOfLines={3}>
-              CTO at @Rocketseat. Passionate about education and changing
-              people's lives through programming.
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.card, {zIndex: 2}]}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://avatars2.githubusercontent.com/u/2254731?v=4',
-            }}
-          />
-          <View style={styles.footer}>
-            <Text style={styles.name}>Diego Fernandes</Text>
-            <Text style={styles.bio} numberOfLines={3}>
-              CTO at @Rocketseat. Passionate about education and changing
-              people's lives through programming.
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.card, {zIndex: 1}]}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://avatars2.githubusercontent.com/u/2254731?v=4',
-            }}
-          />
-          <View style={styles.footer}>
-            <Text style={styles.name}>Diego Fernandes</Text>
-            <Text style={styles.bio} numberOfLines={3}>
-              CTO at @Rocketseat. Passionate about education and changing
-              people's lives through programming.
-            </Text>
-          </View>
-        </View>
+        {users.length === 0 ? (
+          <Text style={styles.empty}>Acabou :(</Text>
+        ) : (
+          users.map((user, index) => (
+            <View
+              key={user._id}
+              style={[styles.card, {zIndex: users.length - index}]}>
+              <Image
+                style={styles.avatar}
+                source={{
+                  uri: user.avatar,
+                }}
+              />
+              <View style={styles.footer}>
+                <Text style={styles.name}>{user.name}</Text>
+                <Text style={styles.bio} numberOfLines={3}>
+                  {user.bio}
+                </Text>
+              </View>
+            </View>
+          ))
+        )}
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Image source={dislike} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Image source={like} />
-        </TouchableOpacity>
-      </View>
+      {users.length > 0 && (
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleDislike}>
+            <Image source={dislike} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleLike}>
+            <Image source={like} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <View />
     </SafeAreaView>
@@ -95,6 +115,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  empty: {
+    alignSelf: 'center',
+    color: '#999',
+    fontSize: 26,
   },
   cardContainer: {
     marginTop: -50,

@@ -45,10 +45,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  textFocus: {
+    backgroundColor: '#fff',
+    borderColor: '#0000ff',
+  },
 });
 
 export default function Login({navigation}) {
   const [user, setUser] = useState('');
+  const [isActive, setIsActive] = useState(false);
+
+  const customStyle = isActive ? styles.customText : {};
 
   useEffect(() => {
     AsyncStorage.getItem('user').then((user) => {
@@ -64,7 +71,7 @@ export default function Login({navigation}) {
     const {_id} = response.data;
     await AsyncStorage.setItem('user', _id);
     console.log(_id);
-    navigation.navigate('Main', {_id});
+    navigation.navigate('Main', {user: _id});
   }
   return (
     <KeyboardAvoidingView
@@ -76,8 +83,10 @@ export default function Login({navigation}) {
         autoCapitalize="none"
         autoCorrect={false}
         placeholder="Digite seu usuário no Github"
+        onFocus={() => setIsActive(true)}
+        onBlur={() => setIsActive(false)}
         placeholderTextColor="#999"
-        style={styles.input}
+        style={[styles.input, isActive ? styles.textFocus : null]}
         value={user}
         onChangeText={setUser}
       />
