@@ -20,3 +20,6 @@ yarn add axios
 
 npm i cors
 yarn add cors
+
+npm i socket.io
+yarn add socket.io
