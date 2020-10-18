@@ -6,3 +6,6 @@ yarn add react-router-dom
 
 npm install axios
 yarn add axios
+
+npm i socket.io-client
+yarn add socket.io-client
