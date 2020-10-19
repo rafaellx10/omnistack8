@@ -10,6 +10,16 @@ const io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
   console.log('Nova Conexão', socket.id);
+
+  socket.on('TipoDaMsg:hello', (message) => {
+    console.log(message);
+  });
+
+  setTimeout(() => {
+    socket.emit('world', {
+      message: 'OmniStack',
+    });
+  }, 4000);
 });
 
 mongoose.connect(
