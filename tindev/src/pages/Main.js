@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import io from 'socket.io-client/dist/socket.io';
 import {
   SafeAreaView,
   Text,
@@ -12,12 +13,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 import logo from '../assets/logo.png';
 import like from '../assets/like.png';
 import dislike from '../assets/dislike.png';
+import itsamatch from '../assets/itsamatch.png';
 
 import api from '../services/api';
 
 export default function Main({navigation}) {
   const id = navigation.getParam('user');
   const [users, setUsers] = useState([]);
+  const [matchDev, setMatchDev] = useState(true);
 
   // console.log(id);
 
@@ -35,6 +38,17 @@ export default function Main({navigation}) {
     }
 
     loadUsers();
+  }, [id]);
+
+  useEffect(() => {
+    const socket = io('http://localhost:3333', {
+      query: {user: id},
+    });
+
+    socket.on('match', (dev) => {
+      console.log(dev);
+      setMatchDev(dev);
+    });
   }, [id]);
 
   async function handleLike() {
@@ -103,7 +117,26 @@ export default function Main({navigation}) {
         </View>
       )}
 
-      <View />
+      {matchDev && (
+        <View style={styles.matchContainer}>
+          <Image style={styles.matchImage} source={itsamatch} />
+          <Image
+            style={styles.matchAvatar}
+            source={{
+              uri:
+                'https://avatars2.githubusercontent.com/u/2254731?s=460&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4',
+            }}
+          />
+          <Text style={styles.matchName}>Diego Fernandes</Text>
+          <Text style={styles.matchBio}>
+            CTO at @Rocketseat. Passionate about education and changing people's
+            lives through programming...
+          </Text>
+          <TouchableOpacity onPress={() => setMatchDev(null)}>
+            <Text style={styles.closeMatch}>FECHAR</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -163,6 +196,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     marginBottom: 30,
+    zIndex: 1,
   },
   button: {
     width: 75,
@@ -180,5 +214,43 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+  },
+  matchContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  matchImage: {
+    height: 60,
+    resizeMode: 'contain',
+  },
+  matchAvatar: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 5,
+    borderColor: '#FFF',
+    marginVertical: 30,
+  },
+  matchName: {
+    fontSize: 26,
+    color: '#FFF',
+  },
+  matchBio: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 24,
+    textAlign: 'center',
+    paddingHorizontal: 30,
+  },
+  closeMatch: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
+    marginTop: 30,
+    fontWeight: 'bold',
   },
 });
