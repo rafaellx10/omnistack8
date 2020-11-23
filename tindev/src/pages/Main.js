@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import io from 'socket.io-client/dist/socket.io';
+import io from 'socket.io-client';
 import {
   SafeAreaView,
   Text,
@@ -20,7 +20,7 @@ import api from '../services/api';
 export default function Main({navigation}) {
   const id = navigation.getParam('user');
   const [users, setUsers] = useState([]);
-  const [matchDev, setMatchDev] = useState(true);
+  const [matchDev, setMatchDev] = useState(null);
 
   // console.log(id);
 
@@ -46,7 +46,6 @@ export default function Main({navigation}) {
     });
 
     socket.on('match', (dev) => {
-      console.log(dev);
       setMatchDev(dev);
     });
   }, [id]);
@@ -123,15 +122,11 @@ export default function Main({navigation}) {
           <Image
             style={styles.matchAvatar}
             source={{
-              uri:
-                'https://avatars2.githubusercontent.com/u/2254731?s=460&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4',
+              uri: matchDev.avatar,
             }}
           />
-          <Text style={styles.matchName}>Diego Fernandes</Text>
-          <Text style={styles.matchBio}>
-            CTO at @Rocketseat. Passionate about education and changing people's
-            lives through programming...
-          </Text>
+          <Text style={styles.matchName}>{matchDev.name}</Text>
+          <Text style={styles.matchBio}>{matchDev.bio}</Text>
           <TouchableOpacity onPress={() => setMatchDev(null)}>
             <Text style={styles.closeMatch}>FECHAR</Text>
           </TouchableOpacity>
