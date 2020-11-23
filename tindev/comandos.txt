@@ -66,3 +66,7 @@ npm run android
 //react-native run-android
 run run ios
 //react-native run-ios
+
+// install socket io client
+npm i socket.io-client
+yarn add socket.io-client
